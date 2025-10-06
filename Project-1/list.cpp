@@ -3,6 +3,7 @@
 #include <iostream>
 #include <numeric>
 #include <vector>
+#include <list>   // needed for std::list
 
 using namespace std;
 
