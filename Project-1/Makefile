@@ -18,6 +18,7 @@
 #    make OPT="-O2 -g2" ...
 #
 OPT ?= -g
+export PATH := $(PWD):$(PATH)
 
 # Program configuration values (used by the C++ compilers)
 MIN_BYTES ?= 3
