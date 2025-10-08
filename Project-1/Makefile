@@ -17,8 +17,11 @@
 #
 #    make OPT="-O2 -g2" ...
 #
-OPT ?= -g
+
+# Make sure executables in the current directory can run without ./ prefix
 export PATH := $(PWD):$(PATH)
+
+OPT ?= -g
 
 # Program configuration values (used by the C++ compilers)
 MIN_BYTES ?= 3
@@ -66,14 +69,11 @@ WC := /usr/bin/wc -l
 AWK_CMDS := awk.cmds
 AWK := /usr/bin/awk -f $(AWK_CMDS)
 LOG = trials.log
+TIME := /usr/bin/time -f "%e real\t%U user\t%S sys\t%M memory (KB)"
 
 # Configure operating-system specific tools
 ifeq ($(OSTYPE), darwin) # macOS
 	TIME := /usr/bin/time
-endif
-
-ifeq ($(OSTYPE),linux)
-	TIME := /usr/bin/time -f "%e real\t%U user\t%S sys\t%M memory (KB)"
 endif
 
 # Sorry Windows users :-P
@@ -126,7 +126,7 @@ test: targets
 #   to the heap to accommodate the program's dynamic memory requests. 
 #   Each program is passed NUM_BLOCKS to specify how many iterations it
 #   should execute
-breaks: target
+breaks: targets
 	@ for pgm in $(TARGETS) ; do \
 		result=$$($(STRACE) $$pgm $(NUM_BLOCKS) 2>&1 $(GREP) brk | $(WC)) ;\
 		$(PRINTF) "%-18s %s\n" "$$pgm:" "$$result" ;\
