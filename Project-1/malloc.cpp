@@ -67,7 +67,7 @@ int main(int argc, char* argv[]) {
             return EXIT_FAILURE;
         }
         
-        if (head == nullptr) {
+        if (head == nullptr) {      
             head = tail = node;
         }
 

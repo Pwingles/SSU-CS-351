@@ -18,6 +18,7 @@
 #    make OPT="-O2 -g2" ...
 #
 
+# Set PATH to include the current directory
 # Make sure executables in the current directory can run without ./ prefix
 export PATH := $(PWD):$(PATH)
 
