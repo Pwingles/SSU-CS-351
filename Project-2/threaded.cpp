@@ -1,8 +1,11 @@
 
+#include <algorithm>
 #include <barrier>
+#include <cstdlib>
 #include <iostream>
 #include <numeric>
 #include <thread>
+#include <unistd.h>
 #include <vector>
 
 // Header file for the Data template class
@@ -94,9 +97,21 @@ int main(int argc, char* argv[]) {
     //
     for (size_t id = 0; id < threads.size(); ++id) {
         threads[id] = std::jthread(
-            []() {
-                // Add your implementation here
-
+            [&, id, chunkSize]() {
+                // Compute the starting and ending indices for this thread's chunk
+                size_t begin = id * chunkSize;
+                size_t end = std::min(begin + chunkSize, data.size());
+                
+                // Tally the data values into a thread-local variable
+                double localSum = 0.0;
+                for (size_t i = begin; i < end; ++i) {
+                    localSum += data[i];
+                }
+                
+                // Store the local sum into the per-thread sums array
+                sums[id] = localSum;
+                
+                // Wait on the barrier for synchronization
                 barrier.arrive_and_wait();
             }
         );
